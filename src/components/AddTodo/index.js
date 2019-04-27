@@ -14,7 +14,10 @@ class AddTodo extends Component {
     }
 
     addTodo = (todo) => {
-        this.props.dispatch(actions.todos.addTodo({...todo, createdAt: moment().format('DD-MM-YYYY HH:MM:SS')}))
+        if (!todo.title || !todo.description) return alert('Please enter job title and description')
+
+        const createdAt = moment().format('DD-MM-YYYY HH:MM:SS');
+        this.props.dispatch(actions.todos.addTodo({id: this.props.lastId + 1, ...todo, createdAt }))
     }
 
     render() {
@@ -48,4 +51,10 @@ class AddTodo extends Component {
     }
 }
 
-export default connect()(AddTodo)
+const mapStateToProps = (state) => {
+    return {
+        lastId: state.todos.lastId
+    }
+}
+
+export default connect(mapStateToProps)(AddTodo)
