@@ -15,11 +15,11 @@ export default StyleSheet.create({
     },
     confirmBtn: {
         marginTop: 15,
-        backgroundColor: 'orange',
-        borderRadius: 5
+        backgroundColor: '#78B7BB',
     },
     btnText: {
         textTransform: 'uppercase',
-        textAlign: 'center'
+        textAlign: 'center',
+        color: '#fff'
     }
 })
