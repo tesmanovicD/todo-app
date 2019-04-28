@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, Alert } from 'react-native'
+import { Text, View, TouchableOpacity, TouchableHighlight, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { Table, Row, Cell, TableWrapper } from 'react-native-table-component'
 
@@ -13,12 +13,19 @@ class TodoList extends Component {
     state = {
         tableHead: ['ID', 'Title', 'Descr.', 'Created', 'Action'],
         tableData: [],
-        modalVisible: false
+        modalVisible: false,
+        pageNumbers: [],
+        currentPage: 1,
+        perPage: 5,
     }
 
     setModalVisible = (modalVisible) => {
         this.setState({modalVisible});
       }
+
+    componentWillMount() {
+        this.updateTableData();
+    }
 
     componentDidMount() {
         this.updateTableData();
@@ -30,11 +37,24 @@ class TodoList extends Component {
         }
     }
 
+    getPageNumbers() {
+        this.state.pageNumbers = [];
+
+        for (let i = 1; i <= Math.ceil((this.state.tableData.length + 1) / this.state.perPage); i++) {
+          this.state.pageNumbers.push(i);
+        }
+    }
+
+    pageNumberClick = (currentPage) => {
+        this.setState({currentPage})
+    }
+
     updateTableData = () => {
         var arr = []
 
         this.props.todos.forEach(element => arr.push([...Object.values(element), 1]))
-        this.setState({tableData: arr})   
+        this.setState({tableData: arr})
+        this.getPageNumbers();
     }
 
     editTodo = (id) => {
@@ -60,6 +80,10 @@ class TodoList extends Component {
 
     renderTableData = () => {
         if (this.state.tableData.length) {
+            const { currentPage, perPage } = this.state;
+            const limit = currentPage *  perPage;
+            const offset = (currentPage * perPage) - perPage
+
             const element = item => (
                 <View style={{flexDirection: 'column', marginHorizontal: 5}}>
                     <TouchableOpacity onPress={() => this.toggleConfirmation('edit', item[0])} style={{marginBottom: 5}}>
@@ -74,8 +98,9 @@ class TodoList extends Component {
                     </TouchableOpacity>
                 </View>    
             );
+            
 
-            return this.state.tableData.map((rowData, index) => (
+            return this.state.tableData.slice(offset, limit).map((rowData, index) => (
                 <TableWrapper key={index} style={styles.row}>
                   {
                     rowData.map((cellData, cellIndex) => (
@@ -92,6 +117,10 @@ class TodoList extends Component {
     }
 
   render() {
+
+    const paginationList = this.state.pageNumbers.map(pageNumber =>
+        <TouchableHighlight onPress={() => this.pageNumberClick(pageNumber)}><Text>{pageNumber}</Text></TouchableHighlight>
+    )
     
     return (
         <View style={{flex: 1}}>
@@ -99,6 +128,9 @@ class TodoList extends Component {
                 <Row data={this.state.tableHead} style={{height: 40}} textStyle={styles.textStyle}/>
                 {this.renderTableData()}
             </Table>
+            <View style={{flexDirection: 'row'}}>
+                {this.state.pageNumbers.length > 1 ? paginationList : <Text></Text>}  
+            </View>
             <ModalComponent setModalVisible={this.setModalVisible} modalVisible={this.state.modalVisible}>
                 <EditTodo id={this.state.editId} setModalVisible={this.setModalVisible}/>
             </ModalComponent>
