@@ -17,7 +17,7 @@ export default (state = initialState, action) => {
         case DELETE_TODO:
             return {
                 ...state,
-                todos: state.todos.filter(t => t.id !== action.payload.id)
+                todos: state.todos.filter(t => t.id !== action.payload)
             }
         default:
             return state

@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableOpacity, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { Table, Row, Cell, TableWrapper } from 'react-native-table-component';
 
 
 import styles from './todoList.style'
+import actions from '../../modules/actions'
 
 class TodoList extends Component {
 
@@ -34,20 +35,32 @@ class TodoList extends Component {
         alert("edit "+id)
     }
 
+    toggleConfirmation = (type, id) => {
+        Alert.alert(
+            'Confirmation',
+            `Are you sure you want to ${type} an item`,
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Confirm', onPress: () => type == 'edit' ? this.editTodo(id) : this.deleteTodo(id) },
+            ],
+            { cancelable: false },
+        );
+    }
+
     deleteTodo = (id) => {
-        alert("delete "+id)
+        this.props.dispatch(actions.todos.deleteTodo(id))
     }
 
     renderTableData = () => {
         if (this.state.tableData.length) {
             const element = item => (
                 <View style={{flexDirection: 'column', marginHorizontal: 5}}>
-                    <TouchableOpacity onPress={() => this.editTodo(item[0])} style={{marginBottom: 5}}>
+                    <TouchableOpacity onPress={() => this.toggleConfirmation('edit', item[0])} style={{marginBottom: 5}}>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>edit</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.deleteTodo(item[0])}>
+                    <TouchableOpacity onPress={() => this.toggleConfirmation('delete', item[0])}>
                         <View style={styles.btn}>
                             <Text style={styles.btnText}>delete</Text>
                         </View>
