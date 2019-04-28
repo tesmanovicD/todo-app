@@ -11,7 +11,14 @@ function deleteTodo(id) {
     }
 }
 
+function editTodo(item) {
+    return dispatch => {
+        dispatch({ type: 'EDIT_TODO', payload: item })
+    }
+}
+
 export default {
     addTodo,
-    deleteTodo
+    deleteTodo,
+    editTodo
 }

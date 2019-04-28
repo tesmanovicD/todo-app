@@ -18,6 +18,8 @@ class AddTodo extends Component {
 
         const createdAt = moment().format('DD-MM-YYYY HH:MM:SS');
         this.props.dispatch(actions.todos.addTodo({id: this.props.lastId + 1, ...todo, createdAt }))
+        this.props.setModalVisible(false)
+        alert("New todo added")
     }
 
     render() {

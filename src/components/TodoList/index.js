@@ -1,18 +1,24 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity, Alert } from 'react-native'
 import { connect } from 'react-redux'
-import { Table, Row, Cell, TableWrapper } from 'react-native-table-component';
-
+import { Table, Row, Cell, TableWrapper } from 'react-native-table-component'
 
 import styles from './todoList.style'
 import actions from '../../modules/actions'
+import ModalComponent from '../../containers/ModalComponent'
+import EditTodo from '../EditTodo'
 
 class TodoList extends Component {
 
     state = {
         tableHead: ['ID', 'Title', 'Descr.', 'Created', 'Action'],
-        tableData: []
+        tableData: [],
+        modalVisible: false
     }
+
+    setModalVisible = (modalVisible) => {
+        this.setState({modalVisible});
+      }
 
     componentDidMount() {
         this.updateTableData();
@@ -32,7 +38,8 @@ class TodoList extends Component {
     }
 
     editTodo = (id) => {
-        alert("edit "+id)
+        this.setState({ editId: id })
+        this.setModalVisible(true)
     }
 
     toggleConfirmation = (type, id) => {
@@ -92,6 +99,9 @@ class TodoList extends Component {
                 <Row data={this.state.tableHead} style={{height: 40}} textStyle={styles.textStyle}/>
                 {this.renderTableData()}
             </Table>
+            <ModalComponent setModalVisible={this.setModalVisible} modalVisible={this.state.modalVisible}>
+                <EditTodo id={this.state.editId} setModalVisible={this.setModalVisible}/>
+            </ModalComponent>
       </View>
     )
   }

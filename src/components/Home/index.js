@@ -28,8 +28,9 @@ class Home extends Component {
         <TodoList/>
 
         <ModalComponent setModalVisible={this.setModalVisible} modalVisible={this.state.modalVisible}>
-          <AddTodo/>
-        </ModalComponent>          
+          <AddTodo setModalVisible={this.setModalVisible}/>
+        </ModalComponent>
+         
       </View>
     )
   }
