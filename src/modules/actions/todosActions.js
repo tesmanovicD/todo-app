@@ -1,4 +1,3 @@
-
 function addTodo(item) {
     return dispatch => {
         dispatch({ type: 'ADD_NEW_TODO', payload: item })

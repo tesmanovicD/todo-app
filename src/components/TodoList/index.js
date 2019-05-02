@@ -51,7 +51,7 @@ class TodoList extends Component {
 
     updateTableData = () => {
         var arr = []
-        const { searchedTerm, searchSubmitted, resetSearch, todos } = this.props
+        const { searchedTerm, todos } = this.props
 
         if (searchedTerm.length != '') {
             todos.forEach(element => {
@@ -109,13 +109,20 @@ class TodoList extends Component {
                     </TouchableOpacity>
                 </View>    
             );
+
+            const detailsPage = id => (
+                <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate('DetailsPage', {id})}>
+                    <Text>{id}</Text>
+                </TouchableOpacity>
+            )
             
 
             return this.state.tableData.slice(offset, limit).map((rowData, index) => (
                 <TableWrapper key={index} style={styles.row}>
                   {
                     rowData.map((cellData, cellIndex) => (
-                      <Cell key={cellIndex} data={cellIndex === 4 ? element(rowData) : cellData} textStyle={styles.textStyle}/>
+                      <Cell key={cellIndex} data={cellIndex === 0 ? detailsPage(cellData) : (cellIndex === 4 ? element(rowData) : cellData)} textStyle={styles.textStyle}/>
                     ))
                   }
                 </TableWrapper>

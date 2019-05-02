@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, View, Alert, TouchableHighlight } from 'react-native'
+import { Button,Text, TextInput, View, Alert, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux'
 
 import styles from './home.style'
@@ -14,6 +14,10 @@ class Home extends Component {
     searchedTerm: '',
   }
 
+  static navigationOptions = {
+    title: 'Todo App',
+  };
+
   setModalVisible = (visible) => {
     this.setState({modalVisible: visible});
   }
@@ -22,25 +26,26 @@ class Home extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Text style={styles.headingText}>Todo app</Text>
         <TouchableHighlight onPress={() => this.setModalVisible(true)}>
           <Text style={styles.addTodoBtn}>Add new todo</Text>
         </TouchableHighlight>
-        <View>
-          <Text>Search todo</Text>
+        <View style={styles.searchWrapper}>
+          <Text>Search todo:</Text>
           <TextInput
             onChangeText={(searchedTerm) => this.setState({ searchedTerm })}
             value={this.state.searchedTerm}
-            placeholder="Enter word (min 3 chars)"
+            placeholder="enter word to search"
+            style={styles.searchInput}
           />
         </View>
         <Text style={styles.todosText}>List of current todos</Text>
-        <TodoList searchedTerm={this.state.searchedTerm}/>
+        <TodoList searchedTerm={this.state.searchedTerm} navigation={this.props.navigation} />
 
         <ModalComponent setModalVisible={this.setModalVisible} modalVisible={this.state.modalVisible}>
           <AddTodo setModalVisible={this.setModalVisible}/>
         </ModalComponent>
          
+    
       </View>
     )
   }

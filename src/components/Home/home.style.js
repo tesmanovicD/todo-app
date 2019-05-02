@@ -15,5 +15,14 @@ export default StyleSheet.create({
         backgroundColor: "#78B7BB",
         color: "#fff",
         padding: 5, 
+    },
+    searchWrapper: {
+        marginTop: 15,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    searchInput: {
+        borderBottomWidth: 1,
+        paddingVertical: 0
     }
 })

@@ -14,14 +14,16 @@ class EditTodo extends Component {
     }
 
     componentDidMount() {
-        const item = this.props.todos.filter(t => t.id == this.props.id)
+        const item = this.props.todos.find(t => t.id == this.props.id)
 
-        this.setState({ title: item[0].title, description: item[0].description })
+        this.setState({ title: item.title, description: item.description })
     }
 
     submitEdit = () => {
         const { title, description } = this.state
         const createdAt = moment().format('DD-MM-YYYY HH:MM:SS');
+
+        if (!title || !description) return alert('Please enter job title and description')
 
         this.props.dispatch(actions.todos.editTodo({ id: this.props.id, title, description, createdAt }))
         this.props.setModalVisible(false)
