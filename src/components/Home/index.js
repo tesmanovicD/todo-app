@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Alert, TouchableHighlight } from 'react-native'
+import { Text, TextInput, View, Alert, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux'
 
 import styles from './home.style'
@@ -10,12 +10,14 @@ import ModalComponent from '../../containers/ModalComponent'
 class Home extends Component {
 
   state = {
-    modalVisible: false
+    modalVisible: false,
+    searchedTerm: '',
   }
 
   setModalVisible = (visible) => {
     this.setState({modalVisible: visible});
   }
+
 
   render() {
     return (
@@ -24,8 +26,16 @@ class Home extends Component {
         <TouchableHighlight onPress={() => this.setModalVisible(true)}>
           <Text style={styles.addTodoBtn}>Add new todo</Text>
         </TouchableHighlight>
+        <View>
+          <Text>Search todo</Text>
+          <TextInput
+            onChangeText={(searchedTerm) => this.setState({ searchedTerm })}
+            value={this.state.searchedTerm}
+            placeholder="Enter word (min 3 chars)"
+          />
+        </View>
         <Text style={styles.todosText}>List of current todos</Text>
-        <TodoList/>
+        <TodoList searchedTerm={this.state.searchedTerm}/>
 
         <ModalComponent setModalVisible={this.setModalVisible} modalVisible={this.state.modalVisible}>
           <AddTodo setModalVisible={this.setModalVisible}/>

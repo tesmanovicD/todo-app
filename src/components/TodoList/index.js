@@ -32,7 +32,7 @@ class TodoList extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.todos !== this.props.todos) {
+        if (prevProps.todos !== this.props.todos || prevProps.searchedTerm !== this.props.searchedTerm) {
             this.updateTableData();
         }
     }
@@ -51,8 +51,19 @@ class TodoList extends Component {
 
     updateTableData = () => {
         var arr = []
+        const { searchedTerm, searchSubmitted, resetSearch, todos } = this.props
 
-        this.props.todos.forEach(element => arr.push([...Object.values(element), 1]))
+        if (searchedTerm.length != '') {
+            todos.forEach(element => {
+                if(element['title'].includes(searchedTerm) || element['description'].includes(searchedTerm)) {
+                    arr.push([...Object.values(element), 1]) 
+                }
+            })
+
+        } else {
+            todos.forEach(element => arr.push([...Object.values(element), 1]))
+        }
+
         this.setState({tableData: arr})
         this.getPageNumbers();
     }
